@@ -41,13 +41,32 @@ class _QuizzPageState extends State<QuizzPage> {
   void checkAnswer(bool userPickedAnswer) {
     bool correctAnswer = quizBrain.getQuestionAnswer();
     setState(() {
+      // Mengecek apakah jawaban benar atau salah
       if (quizBrain.isFinished() == true) {
         Alert(
           context: context,
           title: 'Finished!',
           desc: 'You\'ve reached the end of the quiz.',
+          buttons: [
+            DialogButton(
+              child: Text(
+                'Start Again',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () {
+                setState(() {
+                  quizBrain.reset();
+                  scoreKeeper = [];
+                });
+                Navigator.pop(context);
+              },
+              width: 120,
+            )
+          ],
         ).show();
+        // Fungsi reset quiz untuk mengulang pertanyaan
         quizBrain.reset();
+        // Reset scoreKeeper
         scoreKeeper = [];
       } else {
         if (userPickedAnswer == correctAnswer) {
@@ -67,22 +86,6 @@ class _QuizzPageState extends State<QuizzPage> {
         }
         quizBrain.nextQuestion();
       }
-      // if (userPickedAnswer == correctAnswer) {
-      //   scoreKeeper.add(
-      //     Icon(
-      //       Icons.check,
-      //       color: Colors.green,
-      //     ),
-      //   );
-      // } else {
-      //   scoreKeeper.add(
-      //     Icon(
-      //       Icons.close,
-      //       color: Colors.red,
-      //     ),
-      //   );
-      // }
-      quizBrain.nextQuestion();
     });
   }
 
